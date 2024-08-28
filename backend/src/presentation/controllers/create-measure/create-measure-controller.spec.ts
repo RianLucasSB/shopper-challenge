@@ -17,4 +17,16 @@ describe('CreateMeasureController', () => {
 
     expect(sut.handle(body))
   })
+
+  it('should return 400 if missing customer_code param', async () => {
+    const sut = makeSut()
+
+    const body = {
+      image: "valid_image",
+      measure_datetime: '2011-10-05T14:48:00.000Z',
+      measure_type: 'GAS'
+    }
+
+    expect(sut.handle(body))
+  })
 })
