@@ -1,3 +1,4 @@
+import { MeasureType } from "../../../domain/entities/measure";
 import { InvalidParamError, MissingParamError } from "../../errors";
 import { badRequest } from "../../helpers/http-helper";
 import { Controller, HttpError, HttpRequest, HttpResponse,  } from "../../protocols";
@@ -23,6 +24,10 @@ export class CreateMeasureController implements Controller {
       if (!req[field as keyof  CreateMeasureInputDto]) {
         return badRequest(new InvalidParamError(field))
       }
+    }
+
+    if(!MeasureType[req.measure_type!.toUpperCase() as MeasureType]){
+      return badRequest(new InvalidParamError('measure_type'))
     }
 
     const body: CreateMeasureResponseDto = {
