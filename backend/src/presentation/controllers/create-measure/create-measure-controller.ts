@@ -1,6 +1,8 @@
-import { MeasureType } from "../../../domain/entities/measure";
+import { randomUUID } from "crypto";
+import { Measure, MeasureType } from "../../../domain/entities/measure";
+import { MeasureRepository } from "../../../domain/repositories/measure-repository";
 import { InvalidParamError, MissingParamError } from "../../errors";
-import { badRequest } from "../../helpers/http-helper";
+import { badRequest, conflictError } from "../../helpers/http-helper";
 import { Controller, HttpError, HttpRequest, HttpResponse,  } from "../../protocols";
 import {Request, Response} from 'express'
 
@@ -18,6 +20,8 @@ export interface CreateMeasureResponseDto {
 }
 
 export class CreateMeasureController implements Controller {
+  constructor(private measureRepository: MeasureRepository){}
+
   async handle(req: CreateMeasureInputDto): Promise<HttpResponse> {
      const requiredFields = ['image', 'customer_code', 'measure_datetime', 'measure_type']
      for (const field of requiredFields) {
@@ -28,6 +32,21 @@ export class CreateMeasureController implements Controller {
 
     if(!MeasureType[req.measure_type!.toUpperCase() as MeasureType]){
       return badRequest(new InvalidParamError('measure_type'))
+    }
+
+    const measure = new Measure({
+      customerCode: req.customer_code!, 
+      date: new Date(req.measure_datetime!),
+      imageUrl: "",
+      type: req.measure_type as MeasureType,
+      uuid: randomUUID().toString()      
+    })
+
+
+    const isValid = await this.measureRepository.save(measure)
+
+    if(!isValid){
+      return conflictError(new Error("Leitura do mês já realizada"))
     }
 
     const body: CreateMeasureResponseDto = {

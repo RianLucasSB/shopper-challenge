@@ -15,7 +15,7 @@ export const conflictError = (error: Error): HttpResponse => {
     statusCode: 409,
     body: {
       error_code: "DOUBLE_REPORT",
-      error_description: `Leitura do mês já realizada`
+      error_description: error.message
     }
   }
 }
