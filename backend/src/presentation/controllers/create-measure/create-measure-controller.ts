@@ -18,7 +18,7 @@ export interface CreateMeasureResponseDto {
 
 export class CreateMeasureController implements Controller {
   async handle(req: CreateMeasureInputDto): Promise<HttpResponse> {
-     const requiredFields = ['measure', 'customer_code', 'measure_datetime', 'measure_type']
+     const requiredFields = ['image', 'customer_code', 'measure_datetime', 'measure_type']
      for (const field of requiredFields) {
       if (!req[field as keyof  CreateMeasureInputDto]) {
         return badRequest(new InvalidParamError(field))

@@ -6,16 +6,19 @@ const makeSut = () => {
 }
 
 describe('CreateMeasureController', () => {
-  it('should return 400 if invalid image param', async () => {
+  it('should return 400 if invalid measure type is provided', async () => {
     const sut = makeSut()
 
     const body = {
+      image: "valid_image",
       customer_code: randomUUID().toString(),
       measure_datetime: '2011-10-05T14:48:00.000Z',
-      measure_type: 'GAS'
+      measure_type: 'invalid_measure'
     }
 
-    expect(sut.handle(body))
+    const response = await sut.handle(body)
+
+    expect(response.body).toHaveProperty('error_code', 'INVALID_DATA')
   })
 
   it('should return 400 if missing image param', async () => {
