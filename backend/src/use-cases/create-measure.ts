@@ -24,14 +24,13 @@ export class CreateMeasure {
     const measureType = MeasureType[measure_type.toUpperCase() as  keyof typeof MeasureType]
     const measure = new Measure({
       customerCode: customer_code, 
-      imageUrl: "",
       date: new Date(measure_datetime),
       type: measureType,
       uuid: randomUUID().toString()
     })
 
     return {
-      image_url: measure.imageUrl,
+      image_url: "",
       measure_uuid: measure.uuid,
       measure_value: Math.random() * 10
     }

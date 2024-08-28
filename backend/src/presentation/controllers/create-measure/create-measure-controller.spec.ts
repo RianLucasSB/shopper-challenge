@@ -10,6 +10,8 @@ interface SutTypes {
   generativeAi: GenerativeAi
 }
 
+const validImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"
+
 const makeSut = (): SutTypes => {
   const generativeAiStub = makeGenerativeAi()
   const sut = new CreateMeasureController(makeInMemoryRepository(), generativeAiStub)
@@ -22,8 +24,8 @@ const makeSut = (): SutTypes => {
 
 const makeGenerativeAi = () => {
   class GenerativeAiStub implements GenerativeAi {
-    async extractValueFromImage(image: File): Promise<string> {
-      return ""
+    async extractValueFromImage(image: File): Promise<number> {
+      return 0
     }
     
   }
@@ -57,7 +59,7 @@ describe('CreateMeasureController', () => {
     const extractValueFromImageSpy = jest.spyOn(generativeAi, 'extractValueFromImage')
 
     const body = {
-      image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII",
+      image: validImage,
       customer_code: randomUUID().toString(),
       measure_datetime: '2011-10-05T14:48:00.000Z',
       measure_type: 'GAS'
@@ -71,14 +73,14 @@ describe('CreateMeasureController', () => {
     const {sut} = makeSut()
 
     const body = {
-      image: "valid_image",
+      image: validImage,
       customer_code: randomUUID().toString(),
       measure_datetime: '2011-10-05T14:48:00.000Z',
       measure_type: 'GAS'
     }
 
     const body2 = {
-      image: "valid_image",
+      image: validImage,
       customer_code: randomUUID().toString(),
       measure_datetime: '2011-10-05T14:48:00.000Z',
       measure_type: 'WATER'
@@ -94,14 +96,14 @@ describe('CreateMeasureController', () => {
     const {sut} = makeSut()
 
     const body = {
-      image: "valid_image",
+      image: validImage,
       customer_code: randomUUID().toString(),
       measure_datetime: '2024-10-05T14:48:00.000Z',
       measure_type: 'GAS'
     }
 
     const secondBody = {
-      image: "valid_image",
+      image: validImage,
       customer_code: randomUUID().toString(),
       measure_datetime: '2024-10-16T14:48:00.000Z',
       measure_type: 'GAS'
@@ -118,7 +120,7 @@ describe('CreateMeasureController', () => {
     const {sut} = makeSut()
 
     const body = {
-      image: "valid_image",
+      image: validImage,
       customer_code: randomUUID().toString(),
       measure_datetime: '2011-10-05T14:48:00.000Z',
       measure_type: 'invalid_measure'
@@ -133,7 +135,7 @@ describe('CreateMeasureController', () => {
     const {sut} = makeSut()
 
     const body = {
-      image: "valid_image",
+      image: validImage,
       customer_code: randomUUID().toString(),
       measure_datetime: '2011-10-05T14:48:00.000Z',
       measure_type: 'invalid_measure'
@@ -162,7 +164,7 @@ describe('CreateMeasureController', () => {
     const {sut} = makeSut()
 
     const body = {
-      image: "valid_image",
+      image: validImage,
       measure_datetime: '2011-10-05T14:48:00.000Z',
       measure_type: 'GAS'
     }
@@ -177,7 +179,7 @@ describe('CreateMeasureController', () => {
 
     const body = {
       customer_code: randomUUID().toString(),
-      image: "valid_image",
+      image: validImage,
       measure_type: 'GAS'
     }
 
@@ -192,7 +194,7 @@ describe('CreateMeasureController', () => {
     const body = {
       customer_code: randomUUID().toString(),
       measure_datetime: '2011-10-05T14:48:00.000Z',
-      image: "valid_image",
+      image: validImage,
     }
 
     const response = await sut.handle(body)

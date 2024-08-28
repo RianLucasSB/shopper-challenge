@@ -2,7 +2,6 @@ export interface MeasureProps {
   uuid: string
   date: Date
   customerCode: string
-  imageUrl: string
   type: MeasureType
 }
 
@@ -20,10 +19,6 @@ export class Measure {
   
   public get date() : Date {
     return this.props.date
-  }
-
-  public get imageUrl() : string {
-    return this.props.imageUrl
   }
 
   public get type() : MeasureType {
