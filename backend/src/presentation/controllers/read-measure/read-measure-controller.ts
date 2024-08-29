@@ -7,29 +7,29 @@ import { Controller, HttpResponse,  } from "../../protocols";
 import { GenerativeAi } from "../../../data/protocols/generative-ai";
 import { isValidBase64 } from "../../../validation/base64-validator";
 
-export interface CreateMeasureInputDto {
+export interface ReadMeasureInputDto {
   customer_code?: string
   image?: string 
   measure_datetime?: string
   measure_type?: string
 }
 
-export interface CreateMeasureResponseDto {
+export interface ReadMeasureResponseDto {
   image_url: string 
   measure_value: number
   measure_uuid: string
 }
 
-export class CreateMeasureController implements Controller {
+export class ReadMeasureController implements Controller {
   constructor(
     private measureRepository: MeasureRepository,
     private generativeAi: GenerativeAi
   ){}
 
-  async handle(req: CreateMeasureInputDto): Promise<HttpResponse> {
+  async handle(req: ReadMeasureInputDto): Promise<HttpResponse> {
      const requiredFields = ['image', 'customer_code', 'measure_datetime', 'measure_type']
      for (const field of requiredFields) {
-      if (!req[field as keyof  CreateMeasureInputDto]) {
+      if (!req[field as keyof  ReadMeasureInputDto]) {
         return badRequest(new InvalidParamError(field))
       }
     }
@@ -46,13 +46,14 @@ export class CreateMeasureController implements Controller {
       customerCode: req.customer_code!, 
       date: new Date(req.measure_datetime!),
       type: req.measure_type as MeasureType,
-      uuid: randomUUID().toString()      
+      uuid: randomUUID().toString(),
+      isConfirmed: false
     })
 
 
-    const measureExists = await this.measureRepository.findByMonthAndType(measure.date.getMonth(), measure.type)
+    const isValid = await this.measureRepository.save(measure)
 
-    if(measureExists){
+    if(!isValid){
       return conflictError(new Error("Leitura do mês já realizada"))
     }
 
@@ -60,7 +61,7 @@ export class CreateMeasureController implements Controller {
       generativeAi.
       extractValueFromImage(req.image!, measure.type)
 
-    const body: CreateMeasureResponseDto = {
+    const body: ReadMeasureResponseDto = {
       image_url: "",
       measure_uuid: measure.uuid,
       measure_value: generativeAiResponse

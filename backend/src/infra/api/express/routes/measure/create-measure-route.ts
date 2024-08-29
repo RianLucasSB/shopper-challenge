@@ -1,24 +1,24 @@
 import { HttpMethod, Route } from '../route';
-import { CreateMeasureController } from '../../../../../presentation/controllers/create-measure/create-measure-controller';
+import { ReadMeasureController } from '../../../../../presentation/controllers/read-measure/read-measure-controller';
 import { adaptRoute } from '../../../../../main/adapters/express-route-adapter';
 
-export type CreateMeasureResponseDto = {
+export type ReadMeasureResponseDto = {
   id: string;
 };
 
-export class CreateMeasureRoute implements Route {
+export class ReadMeasureRoute implements Route {
   private constructor(
     private readonly path: string,
     private readonly method: HttpMethod,
-    private readonly createMeasureController: CreateMeasureController,
+    private readonly ReadMeasureController: ReadMeasureController,
   ) {}
 
-  public static create(createMeasureController: CreateMeasureController) {
-    return new CreateMeasureRoute('/measures', HttpMethod.POST, createMeasureController);
+  public static create(ReadMeasureController: ReadMeasureController) {
+    return new ReadMeasureRoute('/measures', HttpMethod.POST, ReadMeasureController);
   }
 
   public getHandler() {
-    return adaptRoute(this.createMeasureController);
+    return adaptRoute(this.ReadMeasureController);
   }
 
   public getPath(): string {

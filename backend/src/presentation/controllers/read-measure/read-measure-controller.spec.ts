@@ -1,12 +1,11 @@
 import { randomUUID } from 'crypto';
-import { CreateMeasureController } from './create-measure-controller';
-import { MeasureRepository } from '../../../domain/repositories/measure-repository';
-import { Measure, MeasureType } from '../../../domain/entities/measure';
+import { ReadMeasureController } from './read-measure-controller';
+import { MeasureType } from '../../../domain/entities/measure';
 import { GenerativeAi } from '../../../data/protocols/generative-ai';
 import { InMemoryRepository } from '../../../tests/repositories/measure-in-memory-repository';
 
 interface SutTypes {
-  sut: CreateMeasureController;
+  sut: ReadMeasureController;
   generativeAi: GenerativeAi;
 }
 
@@ -15,7 +14,7 @@ const validImage =
 
 const makeSut = (): SutTypes => {
   const generativeAiStub = makeGenerativeAi()
-  const sut = new CreateMeasureController(makeInMemoryRepository(), generativeAiStub);
+  const sut = new ReadMeasureController(makeInMemoryRepository(), generativeAiStub);
 
   return {
     sut,
@@ -37,7 +36,7 @@ const makeInMemoryRepository = () => {
   return new InMemoryRepository();
 };
 
-describe('CreateMeasureController', () => {
+describe('ReadMeasureController', () => {
   it('should call generative ai with correct values', async () => {
     const { sut, generativeAi } = makeSut();
     const extractValueFromImageSpy = jest.spyOn(generativeAi, 'extractValueFromImage');

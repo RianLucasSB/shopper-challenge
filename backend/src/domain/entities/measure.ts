@@ -3,6 +3,7 @@ export interface MeasureProps {
   date: Date;
   customerCode: string;
   type: MeasureType;
+  isConfirmed: boolean;
 }
 
 export enum MeasureType {
@@ -23,6 +24,10 @@ export class Measure {
 
   public get type(): MeasureType {
     return this.props.type;
+  }
+
+  public get isConfirmed(): boolean {
+    return this.props.isConfirmed;
   }
 
   constructor(props: MeasureProps) {

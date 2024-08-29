@@ -7,7 +7,8 @@ export class InMemoryRepository implements MeasureRepository {
     uuid: randomUUID().toString(),
     date: new Date('2024-02-05T14:48:00.000Z'),
     type: MeasureType.GAS,
-    customerCode: "1"
+    customerCode: "1",
+    isConfirmed: true
   })
 ];
 
