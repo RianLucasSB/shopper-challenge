@@ -7,7 +7,7 @@ export class InMemoryRepository implements MeasureRepository {
     date: new Date('2024-02-05T14:48:00.000Z'),
     type: MeasureType.GAS,
     customerCode: "1",
-    isConfirmed: true
+    isConfirmed: false
   })];
 
   async findByMonthAndType(month: number, measureType: MeasureType): Promise<Measure | null> {

@@ -47,6 +47,23 @@ describe('ConfirmMeasureController', () => {
     const response = await sut.handle(body);
 
     expect(response.body).toHaveProperty('error_code', 'MEASURE_NOT_FOUND');
+    expect(response.statusCode).toBe(404);
+  });
+
+  it('should return 409 if measure is already confirmed', async () => {
+    const { sut } = makeSut();
+
+    const body = {
+      confirmed_value: 221,
+      measure_uuid: existingUUID
+    }
+
+    await sut.handle(body);
+    const response = await sut.handle(body);
+
+    expect(response.body).toHaveProperty('error_code', 'CONFIRMATION_DUPLICATE');
+    expect(response.statusCode).toBe(409);
+
   });
 
   it('should return 400 if missing measure_uuid param', async () => {
