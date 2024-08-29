@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import { CreateMeasureController } from './create-measure-controller';
 import { MeasureRepository } from '../../../domain/repositories/measure-repository';
-import { Measure } from '../../../domain/entities/measure';
+import { Measure, MeasureType } from '../../../domain/entities/measure';
 import { GenerativeAi } from '../../../data/protocols/generative-ai';
 
 interface SutTypes {
@@ -24,7 +24,7 @@ const makeSut = (): SutTypes => {
 
 const makeGenerativeAi = () => {
   class GenerativeAiStub implements GenerativeAi {
-    async extractValueFromImage(image: string): Promise<number> {
+    async extractValueFromImage(image: string, measureType: MeasureType): Promise<number> {
       return 0;
     }
   }

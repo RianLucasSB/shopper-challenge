@@ -5,6 +5,7 @@ import { InvalidParamError, MissingParamError } from "../../errors";
 import { badRequest, conflictError } from "../../helpers/http-helper";
 import { Controller, HttpResponse,  } from "../../protocols";
 import { GenerativeAi } from "../../../data/protocols/generative-ai";
+import { isValidBase64 } from "../../../validation/base64-validator";
 
 export interface CreateMeasureInputDto {
   customer_code?: string
@@ -35,6 +36,10 @@ export class CreateMeasureController implements Controller {
 
     if(!MeasureType[req.measure_type!.toUpperCase() as MeasureType]){
       return badRequest(new InvalidParamError('measure_type'))
+    }
+
+    if(!isValidBase64(req.image!)){
+      return badRequest(new InvalidParamError('image'))
     }
 
     const measure = new Measure({
