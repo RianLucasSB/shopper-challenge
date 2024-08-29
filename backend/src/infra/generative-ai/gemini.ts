@@ -11,8 +11,8 @@ const model = genAi.getGenerativeModel({
 export class GeminiGenerativeAi implements GenerativeAi {
   async extractValueFromImage(image: string, measureType: string): Promise<number> {
     const prompt = measureType === MeasureType.GAS ? 
-    'essa e uma foto de um medidor de gas, me informe o valor contido nele' : 
-    'essa e uma foto de um medidor de agua, me informe o valor contido nele'
+    'essa e uma foto de um medidor de gas, me informe o valor contido nele, me retorne apenas o valor' : 
+    'essa e uma foto de um medidor de agua, me informe o valor contido nele, me retorne apenas o valor'
     ;
     const base64Image = image.split(',')[1];
     const part: Part = {
@@ -22,10 +22,9 @@ export class GeminiGenerativeAi implements GenerativeAi {
       },
     };
 
-    console.log(part);
     const generatedContent = await model.generateContent([prompt, part]);
 
     console.log(generatedContent.response.text());
-    return 0;
+    return +generatedContent.response.text();
   }
 }

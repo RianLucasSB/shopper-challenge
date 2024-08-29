@@ -5,7 +5,7 @@ export const badRequest = (error: Error): HttpResponse<HttpError> => {
     statusCode: 400,
     body: {
       error_code: 'INVALID_DATA',
-      error_description: `Parâmetro inválido: :${error.message}`,
+      error_description: error.message,
     },
   };
 };

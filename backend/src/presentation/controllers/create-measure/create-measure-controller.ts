@@ -50,9 +50,9 @@ export class CreateMeasureController implements Controller {
     })
 
 
-    const isValid = await this.measureRepository.save(measure)
+    const measureExists = await this.measureRepository.findByMonthAndType(measure.date.getMonth(), measure.type)
 
-    if(!isValid){
+    if(measureExists){
       return conflictError(new Error("Leitura do mês já realizada"))
     }
 
@@ -62,7 +62,7 @@ export class CreateMeasureController implements Controller {
 
     const body: CreateMeasureResponseDto = {
       image_url: "",
-      measure_uuid: "",
+      measure_uuid: measure.uuid,
       measure_value: generativeAiResponse
     }
 

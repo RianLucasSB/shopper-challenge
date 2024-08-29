@@ -3,6 +3,7 @@ import { CreateMeasureController } from './create-measure-controller';
 import { MeasureRepository } from '../../../domain/repositories/measure-repository';
 import { Measure, MeasureType } from '../../../domain/entities/measure';
 import { GenerativeAi } from '../../../data/protocols/generative-ai';
+import { InMemoryRepository } from '../../../tests/repositories/measure-in-memory-repository';
 
 interface SutTypes {
   sut: CreateMeasureController;
@@ -33,19 +34,6 @@ const makeGenerativeAi = () => {
 };
 
 const makeInMemoryRepository = () => {
-  class InMemoryRepository implements MeasureRepository {
-    private data: Measure[] = [];
-
-    async save(measure: Measure): Promise<boolean> {
-      const alreadyExists = this.data.find((m) => m.type === measure.type && m.date.getMonth === measure.date.getMonth);
-      if (alreadyExists) {
-        return false;
-      }
-      this.data.push(measure);
-      return true;
-    }
-  }
-
   return new InMemoryRepository();
 };
 
@@ -95,19 +83,11 @@ describe('CreateMeasureController', () => {
     const body = {
       image: validImage,
       customer_code: randomUUID().toString(),
-      measure_datetime: '2024-10-05T14:48:00.000Z',
+      measure_datetime: '2024-02-05T14:48:00.000Z',
       measure_type: 'GAS',
     };
 
-    const secondBody = {
-      image: validImage,
-      customer_code: randomUUID().toString(),
-      measure_datetime: '2024-10-16T14:48:00.000Z',
-      measure_type: 'GAS',
-    };
-
-    await sut.handle(body);
-    const response = await sut.handle(secondBody);
+    const response = await sut.handle(body);
 
     expect(response.statusCode).toBe(409);
     expect(response.body).toHaveProperty('error_code', 'DOUBLE_REPORT');
