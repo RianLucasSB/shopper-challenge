@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { ReadMeasureController } from './read-measure-controller';
-import { MeasureType } from '../../../domain/entities/measure';
+import { Measure, MeasureType } from '../../../domain/entities/measure';
 import { GenerativeAi } from '../../../data/protocols/generative-ai';
 import { InMemoryRepository } from '../../../tests/repositories/measure-in-memory-repository';
 
