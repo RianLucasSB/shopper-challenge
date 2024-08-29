@@ -12,6 +12,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "forceConsistentCasingInFileNames": true,
+    "typeRoots": ["./src/types", "./node_modules/@types"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"],
