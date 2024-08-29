@@ -10,11 +10,21 @@ export const badRequest = (error: Error): HttpResponse<HttpError> => {
   };
 };
 
-export const conflictError = (error: Error): HttpResponse => {
+export const notFound = (error: Error, errorCode: string): HttpResponse<HttpError> => {
+  return {
+    statusCode: 404,
+    body: {
+      error_code: errorCode,
+      error_description: error.message,
+    },
+  };
+};
+
+export const conflictError = (error: Error, errorCode: string): HttpResponse => {
   return {
     statusCode: 409,
     body: {
-      error_code: 'DOUBLE_REPORT',
+      error_code: errorCode,
       error_description: error.message,
     },
   };

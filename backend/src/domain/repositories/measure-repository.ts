@@ -4,4 +4,5 @@ export interface MeasureRepository {
   save(measure: Measure): Promise<boolean>;
   findByMonthAndType(month: number, measureType: MeasureType): Promise<Measure | null>
   findById(id: string): Promise<Measure | null>
+  confirm(id: string): Promise<boolean>
 }

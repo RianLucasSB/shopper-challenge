@@ -30,6 +30,10 @@ export class Measure {
     return this.props.isConfirmed;
   }
 
+  public set isConfirmed(state: boolean) {
+    this.props.isConfirmed = state;
+  }
+
   constructor(props: MeasureProps) {
     this.props = props;
   }

@@ -54,7 +54,7 @@ export class ReadMeasureController implements Controller {
     const isValid = await this.measureRepository.save(measure)
 
     if(!isValid){
-      return conflictError(new Error("Leitura do mês já realizada"))
+      return conflictError(new Error("Leitura do mês já realizada"), 'DOUBLE_REPORT')
     }
 
     const generativeAiResponse = await this.

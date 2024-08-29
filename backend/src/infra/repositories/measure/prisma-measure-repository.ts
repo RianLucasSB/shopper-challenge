@@ -11,4 +11,8 @@ export class MeasureRepositoryPrisma implements MeasureRepository {
   async save(measure: Measure): Promise<boolean> {
     return true;
   }
+
+  confirm(id: string): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
 }

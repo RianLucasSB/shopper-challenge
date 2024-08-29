@@ -1,8 +1,9 @@
 import { MeasureRepository } from "../../../domain/repositories/measure-repository";
 import { InvalidParamError, MissingParamError } from "../../errors";
-import { badRequest, conflictError } from "../../helpers/http-helper";
+import { badRequest, conflictError, notFound } from "../../helpers/http-helper";
 import { Controller, HttpResponse,  } from "../../protocols";
 import { GenerativeAi } from "../../../data/protocols/generative-ai";
+import { MeasureNotFoundError } from "../../errors/measure-not-found";
 
 export interface ConfirmMeasureInputDto {
   measure_uuid?: string
@@ -24,6 +25,12 @@ export class ConfirmMeasureController implements Controller {
       if (!req[field as keyof  ConfirmMeasureInputDto]) {
         return badRequest(new InvalidParamError(field))
       }
+    }
+
+    const measure = await this.measureRepository.findById(req.measure_uuid!)
+
+    if(!measure){
+      return notFound(new MeasureNotFoundError(), "MEASURE_NOT_FOUND")
     }
 
     const body: ConfirmMeasureResponseDto = {
