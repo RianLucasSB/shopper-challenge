@@ -3,10 +3,8 @@ import { Measure, MeasureType } from "../../../domain/entities/measure";
 import { MeasureRepository } from "../../../domain/repositories/measure-repository";
 import { InvalidParamError, MissingParamError } from "../../errors";
 import { badRequest, conflictError } from "../../helpers/http-helper";
-import { Controller, HttpError, HttpRequest, HttpResponse,  } from "../../protocols";
-import {Request, Response} from 'express'
+import { Controller, HttpResponse,  } from "../../protocols";
 import { GenerativeAi } from "../../../data/protocols/generative-ai";
-import { base64ToFile } from "../../../utils/convert-image";
 
 export interface CreateMeasureInputDto {
   customer_code?: string
@@ -53,8 +51,9 @@ export class CreateMeasureController implements Controller {
       return conflictError(new Error("Leitura do mês já realizada"))
     }
 
-
-    const generativeAiResponse = await this.generativeAi.extractValueFromImage(base64ToFile((req.image!)))
+    const generativeAiResponse = await this.
+      generativeAi.
+      extractValueFromImage(req.image!, measure.type)
 
     const body: CreateMeasureResponseDto = {
       image_url: "",

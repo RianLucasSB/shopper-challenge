@@ -12,7 +12,6 @@
   "author": "",
   "license": "ISC",
   "description": "",
-  "type": "module",
   "devDependencies": {
     "@eslint/js": "^9.9.1",
     "@tsconfig/node20": "^20.1.4",
