@@ -4,6 +4,7 @@ import { badRequest, conflictError, notFound } from "../../helpers/http-helper";
 import { Controller, HttpResponse,  } from "../../protocols";
 import { GenerativeAi } from "../../../data/protocols/generative-ai";
 import { MeasureNotFoundError } from "../../errors/measure-not-found";
+import { MeasureAlreadyConfirmedError } from "../../errors/measure-already-confirmed-error";
 
 export interface ConfirmMeasureInputDto {
   measure_uuid?: string
@@ -32,6 +33,12 @@ export class ConfirmMeasureController implements Controller {
     if(!measure){
       return notFound(new MeasureNotFoundError(), "MEASURE_NOT_FOUND")
     }
+
+    if(measure.isConfirmed){
+      return conflictError(new MeasureAlreadyConfirmedError(), "CONFIRMATION_DUPLICATE")
+    }
+    
+    await this.measureRepository.confirm(measure.uuid)
 
     const body: ConfirmMeasureResponseDto = {
       success: true
