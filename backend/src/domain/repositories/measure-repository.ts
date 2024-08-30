@@ -5,4 +5,5 @@ export interface MeasureRepository {
   findByMonthAndType(month: number, measureType: MeasureType): Promise<Measure | null>
   findById(id: string): Promise<Measure | null>
   confirm(id: string): Promise<boolean>
+  listByCustomerCodeAndMeasureType(code: string, measureType?: MeasureType): Promise<Measure[] | null>
 }

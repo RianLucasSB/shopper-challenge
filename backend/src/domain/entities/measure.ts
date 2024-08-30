@@ -18,6 +18,10 @@ export class Measure {
     return this.props.uuid;
   }
 
+  public get customerCode(): string {
+    return this.props.customerCode;
+  }
+
   public get date(): Date {
     return this.props.date;
   }

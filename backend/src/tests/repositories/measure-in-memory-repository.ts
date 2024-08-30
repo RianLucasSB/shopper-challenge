@@ -40,4 +40,20 @@ export class InMemoryRepository implements MeasureRepository {
 
     return true
   }
+
+  async listByCustomerCodeAndMeasureType(code: string, measureType?: MeasureType): Promise<Measure[] | null> {
+    const measures = this.data.filter(m => {
+      if(measureType){
+        return m.customerCode === code && m.type === measureType
+      }
+
+      return m.customerCode === code
+    })
+
+    if(measures.length <= 0){
+      return null
+    }
+
+    return measures
+  }
 }

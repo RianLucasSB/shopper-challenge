@@ -1,8 +1,7 @@
 import { MeasureRepository } from "../../../domain/repositories/measure-repository";
-import { InvalidParamError, MissingParamError } from "../../errors";
+import { InvalidParamError } from "../../errors";
 import { badRequest, conflictError, notFound } from "../../helpers/http-helper";
 import { Controller, HttpResponse,  } from "../../protocols";
-import { GenerativeAi } from "../../../data/protocols/generative-ai";
 import { MeasureNotFoundError } from "../../errors/measure-not-found";
 import { MeasureAlreadyConfirmedError } from "../../errors/measure-already-confirmed-error";
 
@@ -37,7 +36,7 @@ export class ConfirmMeasureController implements Controller {
     if(measure.isConfirmed){
       return conflictError(new MeasureAlreadyConfirmedError(), "CONFIRMATION_DUPLICATE")
     }
-    
+
     await this.measureRepository.confirm(measure.uuid)
 
     const body: ConfirmMeasureResponseDto = {
