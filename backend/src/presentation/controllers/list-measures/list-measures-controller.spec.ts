@@ -20,7 +20,21 @@ const makeInMemoryRepository = () => {
 };
 
 describe('ListMeasuresController', () => {
-  it('should return 404 measures were not found', async () => {
+  it('should return 400 if invalid measure_type is provided', async () => {
+    const { sut } = makeSut();
+
+    const body = {
+      customer_code: "1",
+      measure_type: "invalid_type"
+    }
+
+    const response = await sut.handle(body);
+
+    expect(response.body).toHaveProperty('error_code', 'INVALID_TYPE');
+    expect(response.statusCode).toBe(400);
+  });
+
+  it('should return 404 if measures were not found', async () => {
     const { sut } = makeSut();
 
     const body = {
