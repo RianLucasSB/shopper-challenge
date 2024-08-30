@@ -82,7 +82,7 @@ describe('ReadMeasureController', () => {
     const body = {
       image: validImage,
       customer_code: randomUUID().toString(),
-      measure_datetime: '2024-02-05T14:48:00.000Z',
+      measure_datetime: '2024-12-05T14:48:00.000Z',
       measure_type: 'GAS',
     };
 

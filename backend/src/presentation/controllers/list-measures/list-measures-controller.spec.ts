@@ -20,6 +20,28 @@ const makeInMemoryRepository = () => {
 };
 
 describe('ListMeasuresController', () => {
+  it('should return 200 if valid data is provided', async () => {
+    const { sut } = makeSut();
+
+    const body = {
+      customer_code: "1",
+      measure_type: "GAS"
+    }
+
+    const body2 = {
+      customer_code: "1",
+    }
+
+    const response = await sut.handle(body);
+    const response2 = await sut.handle(body2);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty("measures");
+    expect(response.body.measures).toHaveLength(1);
+    expect(response2.body.measures).toHaveLength(1);
+    expect(response2.statusCode).toBe(200);
+  });
+
   it('should return 400 if invalid measure_type is provided', async () => {
     const { sut } = makeSut();
 

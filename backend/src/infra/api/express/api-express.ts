@@ -1,13 +1,13 @@
 import { Api } from '../../../data/protocols/api';
-import express, { Express } from 'express';
 import { Route } from './routes/route';
+import express, { Express } from "express"
 
 export class ApiExpress implements Api {
   private app: Express;
 
   private constructor(routes: Route[]) {
     this.app = express();
-    this.app.use(express.json({limit: '50mb'}));
+    this.app.use(express.json({ limit: '50mb' }));
     this.addRoutes(routes);
   }
 
@@ -27,7 +27,7 @@ export class ApiExpress implements Api {
 
   public start(port: number) {
     this.app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
+      console.log(`Server is running on port ${port}`);
       this.listRoutes();
     });
   }

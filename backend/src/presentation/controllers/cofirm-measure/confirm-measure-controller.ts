@@ -37,7 +37,7 @@ export class ConfirmMeasureController implements Controller {
       return conflictError(new MeasureAlreadyConfirmedError(), "CONFIRMATION_DUPLICATE")
     }
 
-    await this.measureRepository.confirm(measure.uuid)
+    await this.measureRepository.confirm(measure.uuid, req.confirmed_value!)
 
     const body: ConfirmMeasureResponseDto = {
       success: true

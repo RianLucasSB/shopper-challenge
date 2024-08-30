@@ -4,6 +4,8 @@ export interface MeasureProps {
   customerCode: string;
   type: MeasureType;
   isConfirmed: boolean;
+  imageUrl: string;
+  value: number | null;
 }
 
 export enum MeasureType {
@@ -28,6 +30,14 @@ export class Measure {
 
   public get type(): MeasureType {
     return this.props.type;
+  }
+
+  public get value(): number | null {
+    return this.props.value;
+  }
+
+  public set value(value: number) {
+    this.props.value = value;
   }
 
   public get isConfirmed(): boolean {

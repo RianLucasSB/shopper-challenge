@@ -4,14 +4,16 @@ import { MeasureRepository } from "../../domain/repositories/measure-repository"
 export class InMemoryRepository implements MeasureRepository {
   private data: Measure[] = [new Measure({
     uuid: '123e4567-e89b-12d3-a456-426614174000',
-    date: new Date('2024-02-05T14:48:00.000Z'),
+    date: new Date('2024-12-05T14:48:00.000Z'),
     type: MeasureType.GAS,
     customerCode: "1",
-    isConfirmed: false
+    isConfirmed: false,
+    imageUrl: "",
+    value: 0
   })];
 
-  async findByMonthAndType(month: number, measureType: MeasureType): Promise<Measure | null> {
-    const measure = this.data.find(m => m.date.getMonth() === month && measureType === m.type);
+  async findByDateAndType(date: Date, measureType: MeasureType): Promise<Measure | null> {
+    const measure = this.data.find(m => m.date.getMonth() === date.getMonth() && measureType === m.type);
     if(!measure) return null
     return measure
   }
@@ -23,7 +25,7 @@ export class InMemoryRepository implements MeasureRepository {
   }
 
   async save(measure: Measure): Promise<boolean> {
-    const alreadyExists = await this.findByMonthAndType(measure.date.getMonth(), measure.type);
+    const alreadyExists = await this.findByDateAndType(measure.date, measure.type);
     if (alreadyExists) {
       return false;
     }
@@ -31,12 +33,13 @@ export class InMemoryRepository implements MeasureRepository {
     return true;
   }
 
-  async confirm(id: string): Promise<boolean> {
+  async confirm(id: string, value: number): Promise<boolean> {
     const measure = await this.findById(id)
 
     if(!measure) return false
 
     measure.isConfirmed = true
+    measure.value = value
 
     return true
   }

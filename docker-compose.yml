@@ -1,0 +1,31 @@
+version: "3"
+services:
+  api-server:
+    build: 
+      context: .
+      dockerfile: ./backend/Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - shopper-app
+    depends_on:
+      - database
+  database:
+    container_name: postgres
+    image: postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - shopper-app
+    environment:
+      - POSTGRES_DB=shopper
+      - POSTGRES_PASSWORD=shopperchallenge
+    volumes:
+      - postgres-data:/data/db
+networks:
+  shopper-app:
+    driver: bridge
+volumes:
+  postgres-data:
+    driver: local

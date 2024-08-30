@@ -19,7 +19,8 @@ export interface ListMeasuresResponseDto {
     measure_datetime: string,
     measure_type: string,
     has_confirmed:boolean,
-    image_url: string
+    image_url: string,
+    measure_value: number,
   }[]
 }
 
@@ -42,7 +43,7 @@ export class ListMeasuresController implements Controller {
 
     const measures = await this.measureRepository.listByCustomerCodeAndMeasureType(
       req.customer_code!,
-      req?.measure_type as MeasureType
+      req?.measure_type?.toUpperCase() as MeasureType
     )
 
     if(!measures) {
@@ -51,7 +52,14 @@ export class ListMeasuresController implements Controller {
 
     const body: ListMeasuresResponseDto = {
       customer_code: req.customer_code!,
-      measures: []
+      measures: measures.map(measure => ({
+        has_confirmed: measure.isConfirmed,
+        image_url: "",
+        measure_datetime: measure.date.toISOString(),
+        measure_type: measure.type,
+        measure_uuid: measure.uuid,
+        measure_value: measure.value ?? 0,
+      }))
     }
 
     return {

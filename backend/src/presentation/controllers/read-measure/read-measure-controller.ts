@@ -42,24 +42,25 @@ export class ReadMeasureController implements Controller {
       return badRequest(new InvalidParamError('image'))
     }
 
-    const measure = new Measure({
-      customerCode: req.customer_code!, 
-      date: new Date(req.measure_datetime!),
-      type: req.measure_type as MeasureType,
-      uuid: randomUUID().toString(),
-      isConfirmed: false
-    })
-
-
-    const isValid = await this.measureRepository.save(measure)
-
-    if(!isValid){
-      return conflictError(new Error("Leitura do mês já realizada"), 'DOUBLE_REPORT')
-    }
-
     const generativeAiResponse = await this.
       generativeAi.
-      extractValueFromImage(req.image!, measure.type)
+      extractValueFromImage(req.image!, req.measure_type as MeasureType)
+
+      const measure = new Measure({
+        customerCode: req.customer_code!, 
+        date: new Date(req.measure_datetime!),
+        type: req.measure_type!.toUpperCase() as MeasureType,
+        uuid: randomUUID().toString(),
+        isConfirmed: false,
+        imageUrl: "",
+        value: generativeAiResponse
+      })
+  
+      const isValid = await this.measureRepository.save(measure)
+  
+      if(!isValid){
+        return conflictError(new Error("Leitura do mês já realizada"), 'DOUBLE_REPORT')
+      }
 
     const body: ReadMeasureResponseDto = {
       image_url: "",
